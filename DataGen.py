@@ -33,3 +33,22 @@ def convert2Matrix(graphs):
         matrices.append(nx.adjacency_matrix(g).todense())
     return matrices
 
+def convert2Graph(matricies):
+    g = []
+    for m in matricies:
+        g.append(nx.from_numpy_matrix(m))
+    return g
+
+def plotGraphs(graphs, labels, num_plots: int = -1):
+    num = num_plots
+    if num_plots == -1:
+        num = len(graphs)
+    for i, g in enumerate(graphs[:num]):
+        plt.figure()
+        plt.title(f'Category {labels[i]}')
+        nx.draw(g, with_labels=True, font_weight='bold')
+    plt.show()
+
+# g, l = GenerateGraphs(10,10)
+# print(type(convert2Matrix(g)[0]))
+# plotGraphs(g,l)
