@@ -5,6 +5,13 @@ import scipy
 
 
 def GenerateGraphs(num_graphs: int, num_nodes: int):
+    """
+    Generating the Graph Data for a randomized category.
+
+    @params:
+    num_graph: number of graphs to generate
+    num_nodes: number of nodes per graph
+    """
     # Here are the categories of graph generators
     types_of_graphs = [
     lambda n: nx.complete_graph(n),
@@ -28,18 +35,39 @@ def GenerateGraphs(num_graphs: int, num_nodes: int):
     return graphs, true_labels
 
 def convert2Matrix(graphs):
+    """
+    Converts list of graphs to list of Adjacency Matrices
+
+    @params:
+    graphs: list of graphs
+    """
     matrices = []
     for g in graphs:
         matrices.append(nx.adjacency_matrix(g).todense())
     return matrices
 
 def convert2Graph(matricies):
+    """
+    Converts list of Adjacency Matrices to list of graphs
+
+    @params:
+    matricies: list of Adjacency Matrices
+    """
     g = []
     for m in matricies:
         g.append(nx.from_numpy_matrix(m))
     return g
 
 def plotGraphs(graphs, labels, num_plots: int = -1):
+    """
+    Plots graphs.
+
+    @params
+    graphs: list of graphs
+    labels: list of labels for the cateogory type of the graph
+
+    num_plots: number of graphs to plot. (default of -1 will plot all graphs)
+    """
     num = num_plots
     if num_plots == -1:
         num = len(graphs)
