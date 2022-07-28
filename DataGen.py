@@ -78,7 +78,21 @@ def plotGraphs(graphs, labels, num_plots: int = -1, show=True):
     if show:
         plt.show()
 
+def make_flat(matrices):
+    vals = []
+    for m in matrices:
+        vals.append(m.flatten())
+    return vals
+
+def toarray(matrices):
+    vals = []
+    for m in matrices:
+        vals.append(np.asarray(m))
+    return vals
+
 # graphs, lab = GenerateGraphs(10000, 10)
+# matrices = convert2Matrix(graphs)
+# print(type(matrices[0].to_array()))
 # max = graphs[0].number_of_nodes()
 # min = graphs[0].number_of_nodes()
 # for g in graphs:
