@@ -17,7 +17,7 @@ def GenerateGraphs(num_graphs: int, num_nodes: int):
     lambda n: nx.complete_graph(n),
     lambda n: nx.turan_graph(n,3),
     lambda n: nx.newman_watts_strogatz_graph(n,3,0.2),
-    lambda n: nx.ladder_graph(n),
+    lambda n: nx.ladder_graph(int(n/2)),
     lambda n: nx.barabasi_albert_graph(n,3)
     ]
         
@@ -76,3 +76,14 @@ def plotGraphs(graphs, labels, num_plots: int = -1):
         plt.title(f'Category {labels[i]}')
         nx.draw(g, with_labels=True, font_weight='bold')
     plt.show()
+
+# graphs, lab = GenerateGraphs(10000, 10)
+# max = graphs[0].number_of_nodes()
+# min = graphs[0].number_of_nodes()
+# for g in graphs:
+#     if g.number_of_nodes() > max:
+#         max = g.number_of_nodes()
+#     elif g.number_of_nodes() < min:
+#         min = g.number_of_nodes()
+# print(max)
+# print(min)
