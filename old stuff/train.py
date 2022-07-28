@@ -226,10 +226,9 @@ def train_real_datasets(dataset_str, epoch_num = 10, lr = 5e-6, encoder = "GCN",
 def new_import_data(network, label):
     return dgl.from_networkx(network), torch.FloatTensor(label)
 
-
-def train_new_datasets(dataset_str, epoch_num = 10, lr = 5e-6, encoder = "GCN", lambda_loss1=1e-4, lambda_loss2=1, sample_size=10, hidden_dim=None):
+def train_new_datasets(network,label, epoch_num = 10, lr = 5e-6, encoder = "GCN", lambda_loss1=1e-4, lambda_loss2=1, sample_size=10, hidden_dim=None):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    g, labels = utils.read_real_datasets(dataset_str)
+    g, labels = new_import_data(network,label)
     g = g.to(device)
     node_features = g.ndata['attr']
     node_labels = labels
