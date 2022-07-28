@@ -58,7 +58,7 @@ def convert2Graph(matricies):
         g.append(nx.from_numpy_matrix(m))
     return g
 
-def plotGraphs(graphs, labels, num_plots: int = -1):
+def plotGraphs(graphs, labels, num_plots: int = -1, show=True):
     """
     Plots graphs.
 
@@ -75,7 +75,8 @@ def plotGraphs(graphs, labels, num_plots: int = -1):
         plt.figure()
         plt.title(f'Category {labels[i]}')
         nx.draw(g, with_labels=True, font_weight='bold')
-    plt.show()
+    if show:
+        plt.show()
 
 # graphs, lab = GenerateGraphs(10000, 10)
 # max = graphs[0].number_of_nodes()
