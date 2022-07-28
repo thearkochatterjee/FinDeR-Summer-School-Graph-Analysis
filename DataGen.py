@@ -76,7 +76,3 @@ def plotGraphs(graphs, labels, num_plots: int = -1):
         plt.title(f'Category {labels[i]}')
         nx.draw(g, with_labels=True, font_weight='bold')
     plt.show()
-
-# g, l = GenerateGraphs(10,10)
-# print(type(convert2Matrix(g)[0]))
-# plotGraphs(g,l)
