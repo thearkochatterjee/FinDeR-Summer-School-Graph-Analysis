@@ -17,6 +17,7 @@ matrices = DataGen.convert2Matrix(graphs)
 matrices = DataGen.toarray(matrices)
 matrices = np.stack(matrices)
 
+##This is the Change
 # DataGen.plotGraphs(graphs,labels,10)
 
 class Encoder(nn.Module):
