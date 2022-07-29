@@ -1,3 +1,4 @@
+from cProfile import label
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
@@ -58,7 +59,7 @@ def convert2Graph(matricies):
         g.append(nx.from_numpy_matrix(m))
     return g
 
-def plotGraphs(graphs, labels, num_plots: int = -1, show=True):
+def plotGraphs(graphs, labels=None, num_plots: int = -1, show=True):
     """
     Plots graphs.
 
@@ -73,7 +74,8 @@ def plotGraphs(graphs, labels, num_plots: int = -1, show=True):
         num = len(graphs)
     for i, g in enumerate(graphs[:num]):
         plt.figure()
-        plt.title(f'Category {labels[i]}')
+        if labels is not None:
+            plt.title(f'Category {labels[i]}')
         nx.draw(g, with_labels=True, font_weight='bold')
     if show:
         plt.show()
@@ -90,7 +92,8 @@ def toarray(matrices):
         vals.append(np.asarray(m))
     return vals
 
-# graphs, lab = GenerateGraphs(10000, 10)
+# graphs, lab = GenerateGraphs(1, 10)
+# plotGraphs(graphs)
 # matrices = convert2Matrix(graphs)
 # print(type(matrices[0].to_array()))
 # max = graphs[0].number_of_nodes()
