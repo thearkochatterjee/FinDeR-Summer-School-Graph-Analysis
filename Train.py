@@ -1,7 +1,7 @@
 from zmq import device
 import DataGen
 
-import pandas
+#import pandas
 import numpy as np
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
@@ -10,11 +10,10 @@ from torch import nn
 import torch.nn.functional as F
 import torch.optim as optim
 
-graphs, labels = DataGen.GenerateGraphs(1000, 10)
+graphs, labels = DataGen.GenerateGraphs(100, 10)
 matrices = DataGen.convert2Matrix(graphs)
 matrices = DataGen.toarray(matrices)
 matrices = np.stack(matrices)
-device = torch.device('cuda')
 
 # DataGen.plotGraphs(graphs,labels,10)
 
@@ -61,13 +60,6 @@ class Decoder(nn.Module):
             nn.ReLU(),
             nn.ConvTranspose2d(1,1,3,stride=1),
             nn.ReLU()
-
-            # nn.Conv2d(1,1,3,stride=1), # 1 channel, kernel size =3, stride =1, reduce size from 10x10 to 8x8
-            # nn.ReLU(),
-            # nn.Conv2d(1,1,3,stride=1), # 1 channel, kernel size =3, stride =1, reduce size from 8x8 to 6x6
-            # nn.ReLU(),
-            # nn.Flatten(),
-            # nn.Linear(36,16)
         )
         
     def forward(self, X):
@@ -111,7 +103,8 @@ optimizer = optim.AdamW(model.parameters(), lr=1e-3)
 # criterion = nn.MSELoss() + nn.KLDivLoss()
 
 def lossfcn(input,output,mu,logvar):
-    mse = F.mse_loss(input,output)
+    someloss = nn.MSELoss()
+    mse = someloss(input, output)
     kld = -0.5*torch.sum(1+logvar-mu**2-logvar.exp())
     return mse + kld
 
@@ -119,11 +112,12 @@ matrices = matrices[:,np.newaxis,:,:]
 X_torch = torch.from_numpy(matrices)
 X_torch = X_torch.float()
 
-epochs=20
+epochs=200
 for epoch in range(epochs):
     for i in range(len(graphs)):
         optimizer.zero_grad()
         Xi = X_torch[i,:,:,:]
+        Xi = Xi.unsqueeze(1)
         decoded, encodedmu, encodesigma = model(Xi)
 
         # compute training reconstruction loss
@@ -137,7 +131,23 @@ for epoch in range(epochs):
         optimizer.step()
 
     # display the epoch training loss
-    print("epoch : {}/{}, loss = {:.6f}".format(epoch + 1, epochs, train_loss.item()))
+    if epoch%5 == 0:
+        print("epoch : {}/{}, loss = {:.6f}".format(epoch + 1, epochs, train_loss.item()))
     
-# decoded, encoded = model(X_torch)
-# Z = encoded.cpu().detach().numpy()
+
+# reconstruction of the data
+output, _, _ = model(X_torch)
+# make everything symmetric
+output = output.detach().numpy()
+outputSymmetric = 0.5*(output+np.transpose(output,(0,1,3,2)))
+outRounded=np.round(outputSymmetric)
+outRounded=outRounded.astype(int)
+
+# not it's a symmetric integer matrix
+
+# now transferring back into graphs
+matrix_list = []
+for j in range(outRounded.shape[0]):
+    matrix_list.append(outRounded[j,0,:,:])
+
+graphs = DataGen.convert2Graph(matrix_list)
