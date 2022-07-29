@@ -151,3 +151,6 @@ for j in range(outRounded.shape[0]):
     matrix_list.append(outRounded[j,0,:,:])
 
 graphs = DataGen.convert2Graph(matrix_list)
+
+# plotting some graphs
+DataGen.plotGraphs(graphs,num_plots=10)
